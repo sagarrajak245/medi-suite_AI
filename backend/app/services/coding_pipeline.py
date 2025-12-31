@@ -92,10 +92,10 @@ class CodingPipelineService:
                     rag_span.update(
                         input=text,
                         output=json_data,
-                        metadata={"token_usage": crew_output.token_usage}
+                        metadata={"token_usage": str(crew_output.token_usage)}
                     )
             
-            # Run evaluation if requested
+            # Run evaluation if requested 
             evaluation = None
             if include_evaluation and json_data:
                 with langfuse.start_as_current_observation(
@@ -123,12 +123,25 @@ class CodingPipelineService:
                             trace_id
                         )
             
+            # Convert token_usage to dict if it exists (CrewAI returns UsageMetrics object)
+            token_usage_dict = None
+            if hasattr(crew_output, 'token_usage') and crew_output.token_usage is not None:
+                try:
+                    # Try model_dump() for Pydantic models
+                    token_usage_dict = crew_output.token_usage.model_dump()
+                except AttributeError:
+                    # Fallback to __dict__ or dict conversion
+                    try:
+                        token_usage_dict = dict(crew_output.token_usage.__dict__)
+                    except:
+                        token_usage_dict = {"raw": str(crew_output.token_usage)}
+            
             return PipelineResponse(
                 success=True,
                 trace_id=trace_id,
                 coding_result=coding_result,
                 evaluation=evaluation,
-                token_usage=crew_output.token_usage if hasattr(crew_output, 'token_usage') else None
+                token_usage=token_usage_dict
             )
             
         except Exception as e:

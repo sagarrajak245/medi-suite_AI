@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     # Startup
     print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     print(f"📍 Environment: {settings.ENVIRONMENT}")
-    print(f"🔗 API Docs: http://{settings.HOST}:{settings.PORT}/docs")
+    print(f"🔗 API Docs: http://127.0.0.1:{settings.PORT}/docs")
     
     yield
     

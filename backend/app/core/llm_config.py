@@ -25,9 +25,9 @@ def get_llama_4_maverick() -> LLM:
     return LLM(model="groq/meta-llama/llama-4-maverick-17b-128e-instruct")
 
 
-def get_gpt_oss_120() -> LLM:
-    """GPT OSS 120B model via Groq - for CPT coding"""
-    return LLM(model="groq/openai/gpt-oss-120b")
+def get_llama_3_3_70b() -> LLM:
+    """Llama 3.3 70B model via Groq - for CPT coding (stable tool calling)"""
+    return LLM(model="groq/llama-3.3-70b-versatile")
 
 
 def get_gemini_flash() -> LLM:
@@ -57,7 +57,7 @@ class LLMModels:
             setup_llm_environment()
             self.gemini_flash = get_gemini_flash()
             self.kimi_k2 = get_kimi_k2()
-            self.gpt_oss_120 = get_gpt_oss_120()
+            self.llama_3_3_70b = get_llama_3_3_70b()
             self.xiaomi_mimo = get_xiaomi_mimo()
             self._initialized = True
     
@@ -74,7 +74,7 @@ class LLMModels:
     def get_cpt_coding_llm(self) -> LLM:
         """LLM for CPT coding agent"""
         self.initialize()
-        return self.gpt_oss_120
+        return self.llama_3_3_70b
     
     def get_hcpcs_coding_llm(self) -> LLM:
         """LLM for HCPCS coding agent"""
